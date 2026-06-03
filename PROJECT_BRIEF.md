@@ -327,11 +327,25 @@ function calculateHealthScore(product):
 **Branch**: `feature/sprint-1`
 **Deploy URL**: https://foodlens-pwa-1780465145.web.app
 
-### Sprint 2 — Scanning (Upcoming)
+### Sprint 2 — Scanning ✅ (June 3–9, 2026)
 
-**Goal**: Build camera, barcode, and photo upload scanner components.
+**Status**: Complete — all 4 tasks delivered
 
-See `docs/sprint-2/plan.md` when ready.
+| Task | Status | Key Deliverable |
+|------|--------|-----------------|
+| 2.1 CameraScanner | ✅ | WebRTC + canvas capture, error handling |
+| 2.2 BarcodeScanner | ✅ | html5-qrcode, auto-stop on detection |
+| 2.3 PhotoUpload | ✅ | Drag & drop, file validation, preview |
+| 2.4 Scan page | ✅ | Tabbed UI, result view, home navigation |
+
+**Branch**: `feature/sprint-2`
+**Deploy URL**: https://foodlens-pwa-1780465145.web.app/scan
+
+### Sprint 3 — Backend (Upcoming)
+
+**Goal**: Firebase Cloud Functions for barcode lookup and Gemini AI analysis.
+
+See `docs/sprint-3/plan.md` when ready.
 
 ---
 

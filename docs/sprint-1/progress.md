@@ -20,6 +20,7 @@
 **Blockers**: None
 
 **Deploy URL**: https://foodlens-pwa-1780465145.web.app
+**GitHub URL**: https://github.com/zheidouz/foodlens-pwa
 
 ---
 

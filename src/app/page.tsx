@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function Home() {
   return (
     <div className="flex flex-col flex-1 items-center justify-center bg-gradient-to-b from-emerald-50 to-white font-sans dark:from-emerald-950 dark:to-black">
@@ -33,16 +35,16 @@ export default function Home() {
           </p>
         </div>
 
-        {/* Scan Button (placeholder) */}
-        <button
-          disabled
-          className="flex items-center gap-3 rounded-full bg-emerald-500 px-10 py-4 text-lg font-semibold text-white shadow-lg shadow-emerald-200/50 transition-all hover:bg-emerald-600 active:scale-95 disabled:opacity-60 disabled:cursor-not-allowed dark:shadow-emerald-900/30"
+        {/* Scan Button */}
+        <Link
+          href="/scan"
+          className="flex items-center gap-3 rounded-full bg-emerald-500 px-10 py-4 text-lg font-semibold text-white shadow-lg shadow-emerald-200/50 transition-all hover:bg-emerald-600 active:scale-95 dark:shadow-emerald-900/30"
         >
           <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M6.827 6.175A2.31 2.31 0 0 1 5.186 7.23a3.42 3.42 0 0 0-.1 5.884 2.31 2.31 0 0 1 1.641 1.055M12 8.25V12m0 0v3.75M12 12h3.75M3.75 12h3.75m9 0h3.75M12 3.75v3.75m0 0V3.75M12 12l2.25 2.25m-4.5 0L12 12" />
           </svg>
           Scan Food
-        </button>
+        </Link>
 
         {/* Feature teasers */}
         <div className="grid grid-cols-3 gap-4 w-full text-center text-xs text-zinc-500 dark:text-zinc-500">
