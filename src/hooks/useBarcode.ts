@@ -43,8 +43,7 @@ export function useBarcode(): UseBarcodeReturn {
     setBarcode(null);
 
     try {
-      // Ensure the container exists in the DOM
-      if (!document.getElementById(SCANNER_ID)) {
+      if (!scannerContainerRef.current) {
         throw new Error("Scanner container not found in DOM.");
       }
 

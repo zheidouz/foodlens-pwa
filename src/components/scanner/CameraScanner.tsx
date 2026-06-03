@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useEffect } from "react";
+import { useEffect } from "react";
 import { Camera, RefreshCw, CheckCircle2, AlertCircle } from "lucide-react";
 import { useCamera } from "@/hooks/useCamera";
 import type { CameraStatus } from "@/types";
@@ -12,7 +12,6 @@ interface CameraScannerProps {
 export function CameraScanner({ onCapture }: CameraScannerProps) {
   const { videoRef, canvasRef, status, error, startCamera, stopCamera, captureSnapshot } =
     useCamera();
-  const snapshotCanvasRef = useRef<HTMLCanvasElement | null>(null);
 
   // Expose capture result
   const handleCapture = () => {

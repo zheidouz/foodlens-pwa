@@ -76,7 +76,7 @@ export default function Home() {
       </main>
 
       <footer className="pb-6 text-center text-xs text-zinc-400">
-        <p>Coming soon &mdash; camera scanning &amp; barcode lookup</p>
+        <p>Point, shoot, and discover what&rsquo;s in your food</p>
       </footer>
     </div>
   );

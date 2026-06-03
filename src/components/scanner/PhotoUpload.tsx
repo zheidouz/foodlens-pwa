@@ -7,6 +7,9 @@ import type { UploadStatus } from "@/types";
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10 MB
 const ACCEPTED_TYPES = ["image/jpeg", "image/png", "image/webp", "image/heic", "image/heif"];
 
+// HEIC/HEIF files often report empty MIME type on some browsers
+const ALLOW_EMPTY_TYPE = true;
+
 interface PhotoUploadProps {
   onSelect: (file: File, dataUrl: string) => void;
 }
@@ -20,8 +23,8 @@ export function PhotoUpload({ onSelect }: PhotoUploadProps) {
 
   const validateAndProcess = useCallback(
     (file: File) => {
-      // Validate type
-      if (!ACCEPTED_TYPES.includes(file.type)) {
+      // Validate type (allow empty type for HEIC/HEIF on some browsers)
+      if (!ALLOW_EMPTY_TYPE && !ACCEPTED_TYPES.includes(file.type)) {
         setStatus("error");
         setErrorMsg(
           `Unsupported file type "${file.type || "unknown"}". Please use JPEG, PNG, or WebP.`
