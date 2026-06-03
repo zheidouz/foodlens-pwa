@@ -17,9 +17,10 @@ A cross-platform **Progressive Web App** that lets users scan food via **camera*
 | **User Auth** | **Firebase Authentication** | Anonymous (scan-first), Google, Apple |
 | **Database** | **Firestore** | Real-time sync, offline persistence, scan history |
 | **File Storage** | **Firebase Storage** | Save scanned food photos for re-analysis |
-| **Backend Logic** | **Firebase Cloud Functions** | Gemini AI calls, scoring engine, barcode lookup |
+| **Backend Logic** | **Firebase Cloud Functions** | Orchestrates Gemini + DeepSeek calls, barcode lookup |
 | **Hosting** | **Firebase Hosting** | HTTPS, CDN, single-command deploy for PWA |
-| **AI / Vision** | **Gemini API (via Cloud Functions)** | Image analysis → structured food data |
+| **AI / Vision** | **Gemini API (via Cloud Functions)** | Food identification, ingredient OCR, label reading → structured food data |
+| **AI / Review** | **DeepSeek API (via Cloud Functions)** | Analyze food data → Good & Bad review, health score, recommendations |
 | **Offline** | **Firestore Offline Persistence** + **Service Worker** | Full offline barcode lookup & history |
 | **Push** | **Firebase Cloud Messaging (FCM)** | Scan completion alerts, weekly summaries |
 | **Analytics** | **Google Analytics for Firebase** | Track scans, popular features, engagement |
@@ -40,6 +41,8 @@ A cross-platform **Progressive Web App** that lets users scan food via **camera*
 | **State Mgmt** | **Zustand** (persisted to IndexedDB) |
 | **Charts** | **Recharts** or **D3.js** |
 | **Icons** | **Lucide React** |
+| **AI Vision** | **Gemini API** | Food identification, OCR on labels |
+| **AI Review** | **DeepSeek API** | Good/Bad analysis, scoring, recommendations |
 
 ---
 
@@ -114,6 +117,7 @@ sequenceDiagram
     participant Firestore
     participant Cloud Functions
     participant Gemini API
+    participant DeepSeek API
     participant OpenFoodFacts
 
     User->>PWA: Open app / Scan barcode / Take photo
@@ -129,15 +133,75 @@ sequenceDiagram
     else Image
         PWA->>Firebase Storage: Upload image
         PWA->>Cloud Functions: onCall('analyzeFoodImage', { imagePath })
-        Cloud Functions->>Gemini API: Analyze image
-        Gemini API-->>Cloud Functions: Structured JSON
+        Cloud Functions->>Gemini API: Identify food & extract label data
+        Note over Gemini API: Returns: product name, ingredients,<br/>nutrition facts, certifications
+        Gemini API-->>Cloud Functions: Structured food JSON
     end
-    Cloud Functions->>Cloud Functions: Run scoring engine
+    Cloud Functions->>DeepSeek API: Generate Good & Bad review
+    Note over DeepSeek API: Input: ingredients + nutrition facts<br/>Output: health score, good/bad points,<br/>alternatives, Nutri-Score estimate
+    DeepSeek API-->>Cloud Functions: Review JSON
+    Cloud Functions->>Cloud Functions: Merge & format final result
     Cloud Functions->>Firestore: Save scan result
     Cloud Functions-->>PWA: Return result
     PWA->>PWA: Cache in Service Worker
     PWA->>PWA: Render Results UI
 ```
+
+---
+
+## 🤖 AI Architecture: Gemini + DeepSeek Dual-API
+
+The app uses **two specialized AI models**, each playing to its strength:
+
+### Gemini (Vision)
+
+| Role | Details |
+|------|--------|
+| **Purpose** | Food identification, OCR, label reading |
+| **Input** | User-submitted food photo |
+| **Output** | Structured JSON: product name, ingredients list, nutrition facts (if visible), certifications (Organic, Vegan, etc.), packaging text, NOVA processing level estimate |
+| **Model** | Gemini 2.5 Flash (fast + cost-effective for vision) |
+| **Call point** | `Cloud Functions` → `Gemini API` |
+
+### DeepSeek (Review)
+
+| Role | Details |
+|------|--------|
+| **Purpose** | Nutritional analysis, health scoring, balanced review generation |
+| **Input** | Structured food data from Gemini (or Open Food Facts for barcode scans) |
+| **Output** | JSON: Health Score (0–100), 3–5 Good points with reasoning, 3–5 Bad points with reasoning, Nutri-Score (A–E) estimate, allergen warnings, 2–3 healthier alternatives |
+| **Model** | DeepSeek V4 (strong reasoning for nuanced analysis) |
+| **Call point** | `Cloud Functions` → `DeepSeek API` |
+
+### Example DeepSeek Prompt
+```
+Given this food product data:
+{
+  "name": "Chocolate Chip Cookie",
+  "ingredients": ["wheat flour", "sugar", "palm oil", "chocolate chips", "salt"],
+  "nutrition": { "fiber": "1.2g", "protein": "3g", "sugar": "22g", "sat_fat": "8g", "sodium": "180mg" },
+  "certifications": ["Organic"]
+}
+
+Provide a balanced health review:
+1. Health Score (0-100): A weighted score considering both positives and negatives
+2. Good points: List 3-5 beneficial aspects with brief reasoning
+3. Bad points: List 3-5 concerns with brief reasoning
+4. Nutri-Score (A-E) estimate based on EU standards
+5. Allergen warnings based on common allergens
+6. Suggest 2 healthier alternatives with reasoning
+
+Return as JSON.
+```
+
+### Why Two APIs?
+
+| Reason | Detail |
+|--------|--------|
+| **Best tool for each job** | Gemini excels at vision/OCR; DeepSeek excels at structured reasoning |
+| **Cost efficiency** | Gemini Flash is cheap for vision; DeepSeek is competitive for text analysis |
+| **Fallback resilience** | If one API fails, the other can still provide partial results |
+| **Easier prompt engineering** | Each prompt is focused and simple rather than one massive prompt trying to do everything |
 
 ---
 
@@ -284,9 +348,10 @@ function calculateHealthScore(product):
 |------|------|
 | 3.1 | `firebase init functions` — TypeScript setup |
 | 3.2 | **`lookUpBarcode`** — Open Food Facts API integration |
-| 3.3 | **`analyzeFoodImage`** — Gemini API integration |
-| 3.4 | **Scoring engine** — pure function for all scores |
-| 3.5 | **Firestore security rules** — per-user data isolation |
+| 3.3 | **`analyzeFoodImage`** — Gemini API integration (food identification + OCR) |
+| 3.4 | **`generateReview`** — DeepSeek API integration (Good & Bad analysis, scoring) |
+| 3.5 | **Cloud Function orchestration** — Chain Gemini → DeepSeek, merge results |
+| 3.6 | **Firestore security rules** — per-user data isolation |
 
 ### Phase 4: Results & Scoring UI (Week 4)
 

@@ -70,8 +70,7 @@ exports.analyzeFoodImage = functions
     }
     const mimeType = data.mimeType || "image/jpeg";
     // Analyze via Gemini
-    const { analyzeFoodImageHandler } = await Promise.resolve().then(() => __importStar(require("./scan")));
-    const product = await analyzeFoodImageHandler(data.imageBase64, mimeType);
+    const product = await (0, scan_1.analyzeFoodImageHandler)(data.imageBase64, mimeType);
     // Run scoring engine on the result
     const score = (0, scoring_1.calculateHealthScore)(product);
     return {

@@ -1,5 +1,5 @@
 import * as functions from "firebase-functions/v1";
-import { lookUpBarcodeHandler } from "./scan";
+import { lookUpBarcodeHandler, analyzeFoodImageHandler } from "./scan";
 import { calculateHealthScore } from "./scoring";
 
 /**
@@ -49,7 +49,6 @@ export const analyzeFoodImage = functions
     const mimeType = data.mimeType || "image/jpeg";
 
     // Analyze via Gemini
-    const { analyzeFoodImageHandler } = await import("./scan");
     const product = await analyzeFoodImageHandler(data.imageBase64, mimeType);
 
     // Run scoring engine on the result

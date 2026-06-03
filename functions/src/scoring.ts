@@ -150,6 +150,10 @@ function calculateNutriscore(nutriments: Record<string, number>): string {
   const satFat = getNutrientValue(nutriments, "saturated-fat_100g");
   const sodium = getNutrientValue(nutriments, "sodium_100g");
 
+  // Check if we have any data at all
+  const hasData = sugar > 0 || satFat > 0 || sodium > 0 || fiber > 0 || protein > 0;
+  if (!hasData) return "?";
+
   // Negative points (N)
   let nPoints = 0;
   if (sugar > 0) nPoints += sugar <= 4.5 ? 1 : sugar <= 9 ? 2 : sugar <= 13.5 ? 3 : sugar <= 18 ? 4 : sugar <= 22.5 ? 5 : sugar <= 27 ? 6 : sugar <= 31 ? 7 : sugar <= 36 ? 8 : sugar <= 40 ? 9 : 10;

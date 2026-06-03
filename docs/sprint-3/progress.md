@@ -1,7 +1,7 @@
 # Sprint 3 — Progress
 
 **Period**: June 3 – June 9, 2026
-**Goal**: Firebase Cloud Functions for barcode lookup, image analysis, scoring engine, and Firestore security rules.
+**Goal**: Firebase Cloud Functions for barcode lookup (Open Food Facts), image analysis (Gemini), AI-powered review (DeepSeek), function orchestration, and Firestore security rules.
 
 ---
 
@@ -14,8 +14,9 @@
 | 3.1 Init Cloud Functions | ✅ Done | TypeScript project under functions/, dependencies installed, compiles clean |
 | 3.2 lookUpBarcode | ✅ Done | Open Food Facts API integration, deployed & live |
 | 3.3 analyzeFoodImage | ✅ Done | Gemini API (gemini-2.5-flash-v2-0), deployed & live |
-| 3.4 Scoring engine | ✅ Done | Pure function: health_score 0-100, Nutri-Score, good/bad factors, NOVA |
-| 3.5 Firestore security rules | ✅ Done | Per-user data isolation (users/{uid}/scans, users/{uid}/profile) |
+| 3.4 generateReview (DeepSeek) | 🔄 Refining | Replacing old scoring engine with DeepSeek AI review |
+| 3.5 Orchestration (Gemini → DeepSeek) | ⏳ Pending | Chain analyzeFoodImage → generateReview, merge results |
+| 3.6 Firestore security rules | ✅ Done | Per-user data isolation (users/{uid}/scans, users/{uid}/profile) |
 
 **Blockers**: None. Blaze billing enabled, Gemini API key set as Firebase secret, functions deployed.
 
@@ -25,9 +26,9 @@
 
 ## Overall Status
 
-**Progress**: ▰▰▰▰▰▰▰▰▰▰ 100%
+**Progress**: ▰▰▰▰▰▰▰▰▰▰ 65%
 
-**RAG Status**: 🟢 Green
+**RAG Status**: 🟡 Yellow — scope refined (DeepSeek integration replaces pure scoring engine)
 
 ## Key Decisions Made During Sprint
 

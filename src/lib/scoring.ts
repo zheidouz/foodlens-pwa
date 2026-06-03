@@ -3,7 +3,13 @@
  * These are display-only utilities — the actual scoring runs in Cloud Functions.
  */
 
-import type { Factor } from "../../functions/src/scoring";
+// Shared factor type (mirrored from functions/src/scoring.ts — can't cross project boundary)
+export interface Factor {
+  label: string;
+  score: number;
+  type: "good" | "bad";
+  icon?: string;
+}
 
 export interface ScoreDisplay {
   healthScore: number;
@@ -50,6 +56,7 @@ export function getNutriscoreColor(grade: string): string {
     C: "text-amber-600 bg-amber-100 dark:bg-amber-900/30 dark:text-amber-400",
     D: "text-orange-600 bg-orange-100 dark:bg-orange-900/30 dark:text-orange-400",
     E: "text-red-600 bg-red-100 dark:bg-red-900/30 dark:text-red-400",
+    "?": "text-zinc-500 bg-zinc-200 dark:bg-zinc-700 dark:text-zinc-400",
   };
   return map[grade?.toUpperCase()] || "text-zinc-500 bg-zinc-100";
 }
@@ -62,6 +69,7 @@ export function getNutriscoreLabel(grade: string): string {
     C: "Average nutritional quality",
     D: "Poor nutritional quality",
     E: "Very poor nutritional quality",
+    "?": "Insufficient data to calculate",
   };
   return map[grade?.toUpperCase()] || "Unknown";
 }

@@ -122,6 +122,10 @@ function calculateNutriscore(nutriments) {
     const sugar = getNutrientValue(nutriments, "sugars_100g");
     const satFat = getNutrientValue(nutriments, "saturated-fat_100g");
     const sodium = getNutrientValue(nutriments, "sodium_100g");
+    // Check if we have any data at all
+    const hasData = sugar > 0 || satFat > 0 || sodium > 0 || fiber > 0 || protein > 0;
+    if (!hasData)
+        return "?";
     // Negative points (N)
     let nPoints = 0;
     if (sugar > 0)
