@@ -17,6 +17,7 @@ export function useCamera(): UseCameraReturn {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
+  const startingRef = useRef(false);
   const [status, setStatus] = useState<CameraStatus>("idle");
   const [error, setError] = useState<CameraError | null>(null);
 
@@ -33,6 +34,10 @@ export function useCamera(): UseCameraReturn {
   }, []);
 
   const startCamera = useCallback(async () => {
+    // Guard against double-start
+    if (startingRef.current || status === "streaming") return;
+    startingRef.current = true;
+
     setStatus("requesting");
     setError(null);
 
@@ -73,8 +78,10 @@ export function useCamera(): UseCameraReturn {
 
       setError(camErr);
       setStatus("error");
+    } finally {
+      startingRef.current = false;
     }
-  }, []);
+  }, [status]);
 
   const captureSnapshot = useCallback((): string | null => {
     const video = videoRef.current;

@@ -48,7 +48,6 @@ export function useBarcode(): UseBarcodeReturn {
       }
 
       const scanner = new Html5Qrcode(SCANNER_ID);
-      scannerRef.current = scanner;
 
       await scanner.start(
         { facingMode: "environment" },
@@ -66,6 +65,9 @@ export function useBarcode(): UseBarcodeReturn {
           // QR code scanning feedback — no-op, just keep scanning
         }
       );
+
+      // Only set ref after start succeeds
+      scannerRef.current = scanner;
     } catch (err: unknown) {
       const message =
         err instanceof Error ? err.message : "Failed to start barcode scanner.";
