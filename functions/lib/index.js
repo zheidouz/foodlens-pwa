@@ -62,7 +62,7 @@ exports.lookUpBarcode = functions
  */
 exports.analyzeFoodImage = functions
     .region("us-central1")
-    .runWith({ memory: "1GB", maxInstances: 5, timeoutSeconds: 60 })
+    .runWith({ memory: "1GB", maxInstances: 5, timeoutSeconds: 60, secrets: ["GEMINI_API_KEY"] })
     .https.onCall(async (data, context) => {
     functions.logger.info("analyzeFoodImage called");
     if (!data.imageBase64 || typeof data.imageBase64 !== "string") {

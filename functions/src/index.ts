@@ -35,7 +35,7 @@ export const lookUpBarcode = functions
  */
 export const analyzeFoodImage = functions
   .region("us-central1")
-  .runWith({ memory: "1GB", maxInstances: 5, timeoutSeconds: 60 })
+  .runWith({ memory: "1GB", maxInstances: 5, timeoutSeconds: 60, secrets: ["GEMINI_API_KEY"] })
   .https.onCall(async (data: { imageBase64?: string; mimeType?: string }, context) => {
     functions.logger.info("analyzeFoodImage called");
 
