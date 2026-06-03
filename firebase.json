@@ -8,6 +8,18 @@
     ],
     "rewrites": [
       {
+        "source": "/api/lookUpBarcode",
+        "function": "lookUpBarcode"
+      },
+      {
+        "source": "/api/analyzeFoodImage",
+        "function": "analyzeFoodImage"
+      },
+      {
+        "source": "/api/generateFoodReview",
+        "function": "generateFoodReview"
+      },
+      {
         "source": "**",
         "destination": "/index.html"
       }

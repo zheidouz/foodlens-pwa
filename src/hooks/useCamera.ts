@@ -89,16 +89,19 @@ export function useCamera(): UseCameraReturn {
 
     if (!video || !canvas) return null;
 
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
+    const maxDim = 640;
+    const scale = Math.min(maxDim / video.videoWidth, maxDim / video.videoHeight, 1);
+
+    canvas.width = Math.round(video.videoWidth * scale);
+    canvas.height = Math.round(video.videoHeight * scale);
 
     const ctx = canvas.getContext("2d");
     if (!ctx) return null;
 
-    ctx.drawImage(video, 0, 0);
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
     setStatus("captured");
 
-    return canvas.toDataURL("image/jpeg", 0.9);
+    return canvas.toDataURL("image/jpeg", 0.8);
   }, []);
 
   // Cleanup on unmount

@@ -229,8 +229,16 @@ Fill estimated values from visible labels or packaging. Use null for unknown num
 
   // Parse the JSON from Gemini's response
   try {
-    // Strip any markdown code fences if Gemini wrapped the response
-    const cleaned = text.replace(/```json\s*/g, "").replace(/```\s*/g, "").trim();
+    // Strip any markdown code fences
+    let cleaned = text.replace(/```json\s*/g, "").replace(/```\s*/g, "").trim();
+
+    // If there's extra text around the JSON, extract just the JSON object
+    const firstBrace = cleaned.indexOf("{");
+    const lastBrace = cleaned.lastIndexOf("}");
+    if (firstBrace !== -1 && lastBrace > firstBrace) {
+      cleaned = cleaned.slice(firstBrace, lastBrace + 1);
+    }
+
     const parsed = JSON.parse(cleaned) as AnalyzedProduct;
 
     return {

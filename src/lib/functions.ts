@@ -1,11 +1,31 @@
 import { getFunctions, httpsCallable } from "firebase/functions";
-import { app } from "@/lib/firebase";
 
-// Cloud Functions are deployed to us-central1
-const fbFunctions = (() => {
-  if (typeof window === "undefined") return null;
-  return getFunctions(app, "us-central1");
-})();
+// Cloud Functions are called via Firebase Hosting rewrites (same origin, no CORS)
+const FUNCTION_BASE = typeof window !== "undefined"
+  ? `${window.location.origin}/api`
+  : "";
+
+async function callFunction<T>(name: string, data: unknown): Promise<T> {
+  if (!FUNCTION_BASE) {
+    throw new Error("Cloud Functions not available on the server.");
+  }
+
+  const res = await fetch(`${FUNCTION_BASE}/${name}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    // Callable functions expect data wrapped in { "data": ... }
+    body: JSON.stringify({ data }),
+  });
+
+  const json = await res.json();
+
+  if (!res.ok || json.error) {
+    throw new Error(json.error?.message || `Request failed (${res.status})`);
+  }
+
+  // Callable functions return { "result": ... }
+  return json.result as T;
+}
 
 /**
  * Look up a product by barcode via Open Food Facts API.
@@ -25,13 +45,7 @@ export async function lookUpBarcode(
     bad_factors: { label: string; score: number; type: "good" | "bad" }[];
   };
 }> {
-  if (!fbFunctions) {
-    throw new Error("Cloud Functions not available on the server.");
-  }
-
-  const fn = httpsCallable<{ barcode: string }, unknown>(fbFunctions, "lookUpBarcode");
-  const result = await fn({ barcode });
-  return result.data as ReturnType<typeof lookUpBarcode>;
+  return callFunction("lookUpBarcode", { barcode });
 }
 
 /**
@@ -53,16 +67,7 @@ export async function analyzeFoodImage(
     bad_factors: { label: string; score: number; type: "good" | "bad" }[];
   };
 }> {
-  if (!fbFunctions) {
-    throw new Error("Cloud Functions not available on the server.");
-  }
-
-  const fn = httpsCallable<{ imageBase64: string; mimeType?: string }, unknown>(
-    fbFunctions,
-    "analyzeFoodImage"
-  );
-  const result = await fn({ imageBase64, mimeType: mimeType || "image/jpeg" });
-  return result.data as ReturnType<typeof analyzeFoodImage>;
+  return callFunction("analyzeFoodImage", { imageBase64, mimeType: mimeType || "image/jpeg" });
 }
 
 /**
@@ -90,11 +95,5 @@ export async function generateFoodReview(
     summary: string;
   };
 }> {
-  if (!fbFunctions) {
-    throw new Error("Cloud Functions not available on the server.");
-  }
-
-  const fn = httpsCallable<typeof productData, unknown>(fbFunctions, "generateFoodReview");
-  const result = await fn(productData);
-  return result.data as ReturnType<typeof generateFoodReview>;
+  return callFunction("generateFoodReview", productData);
 }

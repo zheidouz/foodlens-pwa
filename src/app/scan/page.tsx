@@ -83,8 +83,15 @@ export default function ScanPage() {
       }
       router.push("/results");
     } catch (err: unknown) {
-      const message =
-        err instanceof Error ? err.message : "Analysis failed. Please try again.";
+      // Extract the actual error message from Firebase Functions errors
+      let message = "Analysis failed. Please try again.";
+      if (err instanceof Error) {
+        // Firebase HttpsError wraps the server message
+        const fbErr = err as { details?: string; code?: string };
+        message = fbErr.details
+          ? String(fbErr.details)
+          : err.message.replace(/^.*?: /, "");
+      }
       setAnalysisError(message);
     } finally {
       setAnalyzing(false);
