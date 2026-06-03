@@ -1,0 +1,16 @@
+[debug] [2026-06-03T08:09:40.361Z] ----------------------------------------------------------------------
+[debug] [2026-06-03T08:09:40.363Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\Client\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy --only functions:analyzeFoodImage --force
+[debug] [2026-06-03T08:09:40.363Z] CLI Version:   15.19.0
+[debug] [2026-06-03T08:09:40.363Z] Platform:      win32
+[debug] [2026-06-03T08:09:40.363Z] Node Version:  v24.15.0
+[debug] [2026-06-03T08:09:40.363Z] Time:          Wed Jun 03 2026 16:09:40 GMT+0800 (Philippine Standard Time)
+[debug] [2026-06-03T08:09:40.363Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2026-06-03T08:09:41.410Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-06-03T08:09:41.410Z] > authorizing via signed-in user (casimeropj@gmail.com)
+[debug] [2026-06-03T08:09:41.410Z] [iam] checking project foodlens-pwa-1780465145 for permissions ["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get"]
+[debug] [2026-06-03T08:09:41.411Z] Checked if tokens are valid: false, expires at: 1780474968972
+[debug] [2026-06-03T08:09:41.411Z] Checked if tokens are valid: false, expires at: 1780474968972
+[debug] [2026-06-03T08:09:41.411Z] > refreshing access token with scopes: []
+[debug] [2026-06-03T08:09:41.412Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2026-06-03T08:09:41.412Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]

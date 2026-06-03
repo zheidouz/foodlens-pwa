@@ -124,7 +124,7 @@ export async function lookUpBarcodeHandler(barcode: string): Promise<ProductData
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY || "";
 
 const GEMINI_ENDPOINT =
-  "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-v2-0:generateContent";
+  "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent";
 
 interface GeminiResponse {
   candidates?: {
