@@ -55,3 +55,15 @@
 ### Bug 3 — Dead manifest shortcuts (404)
 **File**: `public/manifest.json`
 **Fix**: Removed `/scan` and `/history` shortcuts (pages don't exist yet). Set to `[]`.
+
+### Bug 4 — `parseBody` doesn't unwrap client `{ data: ... }` wrapper
+**File**: `functions/src/index.ts`
+**Fix**: `parseBody()` now checks for `req.body.data` before returning the raw body. Client sends `{ data: { imageBase64, mimeType } }` (callable-compatible), but server was reading `body.imageBase64` → `undefined` → 500 error.
+
+### Bug 5 — Tiny placeholder icons flagged "not a valid image"
+**File**: `public/icons/*.png`
+**Fix**: Regenerated all 3 icons (192, 512, 512-maskable) using sharp with an emerald-green camera/lens SVG design. Sizes now 7 KB / 25 KB / 22 KB.
+
+### Bug 6 — Missing `mobile-web-app-capable` meta tag
+**File**: `src/app/layout.tsx`
+**Fix**: Added `mobile-web-app-capable: "yes"` alongside `apple-mobile-web-app-capable` in `metadata.other`. This is the standards-track PWA meta tag for non-Apple browsers.
