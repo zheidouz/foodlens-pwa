@@ -40,3 +40,17 @@
 ## Deviations from Plan
 
 - (to be filled)
+
+## Bug Fixes (June 3)
+
+### Bug 1 — Memory leak: `onAuthStateChanged` not unsubscribed
+**File**: `src/lib/firebase.ts`, `src/components/AuthInitializer.tsx`
+**Fix**: `initAuth()` now returns the `unsubscribe` function. `AuthInitializer` calls it in the `useEffect` cleanup.
+
+### Bug 2 — Race condition: `analytics` mutable let export
+**File**: `src/lib/firebase.ts`
+**Fix**: Replaced `export let analytics` with async `getAnalyticsInstance()` getter.
+
+### Bug 3 — Dead manifest shortcuts (404)
+**File**: `public/manifest.json`
+**Fix**: Removed `/scan` and `/history` shortcuts (pages don't exist yet). Set to `[]`.
