@@ -308,6 +308,44 @@ function calculateHealthScore(product):
 | 5.4 | **Shopping List** — Firestore collection per user |
 | 5.5 | **Weekly summary** — scheduled Cloud Function + FCM push |
 
+---
+
+## 📊 Sprint Status
+
+### Sprint 1 — PWA Foundation ✅ (June 3–9, 2026)
+
+**Status**: Complete — all 5 tasks delivered
+
+| Task | Status | Key Deliverable |
+|------|--------|-----------------|
+| 1.1 Scaffold Next.js | ✅ | TypeScript + Tailwind v4 + App Router + src/ |
+| 1.2 Configure PWA | ✅ | @serwist/next, manifest, SW, offline, icons |
+| 1.3 Firebase project | ✅ | Project created, Hosting + Firestore enabled |
+| 1.4 Firebase SDK | ✅ | auth/db/storage/analytics, silent anonymous auth |
+| 1.5 Deploy | ✅ | Live at https://foodlens-pwa-1780465145.web.app |
+
+**Branch**: `feature/sprint-1`
+**Deploy URL**: https://foodlens-pwa-1780465145.web.app
+
+### Sprint 2 — Scanning (Upcoming)
+
+**Goal**: Build camera, barcode, and photo upload scanner components.
+
+See `docs/sprint-2/plan.md` when ready.
+
+---
+
+## 🔧 Configuration
+
+| Item | Value |
+|------|-------|
+| Firebase Project ID | `foodlens-pwa-1780465145` |
+| Firebase Location | `us-central1` (nam5) |
+| Hosting URL | https://foodlens-pwa-1780465145.web.app |
+| PWA Theme Color | `#10b981` |
+| Next.js Build | Static export (`output: 'export'`) |
+| Dev/Build Flag | `--webpack` (required for Serwist) |
+
 ### Phase 6: Polish & Launch (Week 6)
 
 | Step | Task |
