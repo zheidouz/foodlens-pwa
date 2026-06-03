@@ -38,14 +38,14 @@ export function AllergenAlert({
   if (highSugar) {
     flags.push({
       type: "warning",
-      message: "High sugar content — exceeds recommended daily intake per serving",
+      message: "High sugar content — 22.5g+ per 100g exceeds recommended limits",
     });
   }
 
   if (highSodium) {
     flags.push({
       type: "warning",
-      message: "High sodium content — may contribute to high blood pressure",
+      message: "High sodium content — 0.8g+ per 100g exceeds recommended limits",
     });
   }
 

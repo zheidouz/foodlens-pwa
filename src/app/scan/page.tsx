@@ -76,7 +76,11 @@ export default function ScanPage() {
       }
 
       // Cache result in sessionStorage for the results page
-      sessionStorage.setItem("foodlens_last_analysis", JSON.stringify(analysisResult));
+      try {
+        sessionStorage.setItem("foodlens_last_analysis", JSON.stringify(analysisResult));
+      } catch {
+        // sessionStorage may be full or unavailable — proceed anyway
+      }
       router.push("/results");
     } catch (err: unknown) {
       const message =

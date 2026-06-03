@@ -4,12 +4,12 @@ interface NutriScoreBadgeProps {
   grade: string;
 }
 
-const GRADE_COLORS: Record<string, { bg: string; text: string; bar: string }> = {
-  A: { bg: "bg-green-600", text: "text-white", bar: "bg-green-500" },
-  B: { bg: "bg-lime-500", text: "text-white", bar: "bg-lime-400" },
-  C: { bg: "bg-amber-400", text: "text-white", bar: "bg-amber-400" },
-  D: { bg: "bg-orange-500", text: "text-white", bar: "bg-orange-500" },
-  E: { bg: "bg-red-600", text: "text-white", bar: "bg-red-600" },
+const GRADE_COLORS: Record<string, { bg: string; text: string }> = {
+  A: { bg: "bg-green-600", text: "text-white" },
+  B: { bg: "bg-lime-500", text: "text-white" },
+  C: { bg: "bg-amber-400", text: "text-white" },
+  D: { bg: "bg-orange-500", text: "text-white" },
+  E: { bg: "bg-red-600", text: "text-white" },
 };
 
 const GRADE_LABELS: Record<string, string> = {
@@ -25,7 +25,7 @@ const LETTERS = ["A", "B", "C", "D", "E"];
 
 export function NutriScoreBadge({ grade }: NutriScoreBadgeProps) {
   const normalized = grade?.toUpperCase() || "?";
-  const colors = GRADE_COLORS[normalized] || { bg: "bg-zinc-400", text: "text-white", bar: "bg-zinc-400" };
+  const colors = GRADE_COLORS[normalized] || { bg: "bg-zinc-400", text: "text-white" };
   const label = GRADE_LABELS[normalized] || "Unknown";
 
   if (normalized === "?") {

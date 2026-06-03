@@ -1,6 +1,5 @@
 "use client";
 
-import { use } from "react";
 import { ArrowLeft, ThumbsUp, ThumbsDown, FlaskConical } from "lucide-react";
 import Link from "next/link";
 import { HealthScoreGauge } from "@/components/results/HealthScoreGauge";
@@ -104,9 +103,9 @@ export default function ResultsPage() {
               </h3>
             </div>
             <div className="space-y-2">
-              {score.good_factors.map((factor: Factor, i: number) => (
+              {score.good_factors.map((factor: Factor) => (
                 <div
-                  key={i}
+                  key={factor.label}
                   className="flex items-center justify-between rounded-xl bg-emerald-50 p-3 dark:bg-emerald-900/20"
                 >
                   <span className="text-sm font-medium text-emerald-800 dark:text-emerald-200">
@@ -131,9 +130,9 @@ export default function ResultsPage() {
               </h3>
             </div>
             <div className="space-y-2">
-              {score.bad_factors.map((factor: Factor, i: number) => (
+              {score.bad_factors.map((factor: Factor) => (
                 <div
-                  key={i}
+                  key={factor.label}
                   className="flex items-center justify-between rounded-xl bg-red-50 p-3 dark:bg-red-900/20"
                 >
                   <span className="text-sm font-medium text-red-800 dark:text-red-200">
