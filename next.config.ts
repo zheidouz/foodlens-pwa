@@ -3,6 +3,10 @@ import withSerwistInit from "@serwist/next";
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
+  output: "export",
+  images: {
+    unoptimized: true,
+  },
 };
 
 const withSerwist = withSerwistInit({
