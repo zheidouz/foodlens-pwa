@@ -64,3 +64,37 @@ export async function analyzeFoodImage(
   const result = await fn({ imageBase64, mimeType: mimeType || "image/jpeg" });
   return result.data as ReturnType<typeof analyzeFoodImage>;
 }
+
+/**
+ * Generate a Good & Bad review using DeepSeek AI.
+ * Takes structured product data and returns a human-readable review.
+ */
+export async function generateFoodReview(
+  productData: {
+    product_name: string;
+    ingredients: string[];
+    nutriments: Record<string, number>;
+    nova_group: number | null;
+    additives: string[];
+    allergens: string[];
+  }
+): Promise<{
+  success: boolean;
+  review: {
+    health_score: number;
+    nutriscore_estimate: string;
+    good_points: { point: string; reason: string }[];
+    bad_points: { point: string; reason: string }[];
+    allergen_warnings: string[];
+    alternatives: { name: string; reason: string }[];
+    summary: string;
+  };
+}> {
+  if (!fbFunctions) {
+    throw new Error("Cloud Functions not available on the server.");
+  }
+
+  const fn = httpsCallable<typeof productData, unknown>(fbFunctions, "generateFoodReview");
+  const result = await fn(productData);
+  return result.data as ReturnType<typeof generateFoodReview>;
+}

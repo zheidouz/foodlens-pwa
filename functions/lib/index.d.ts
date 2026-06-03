@@ -7,3 +7,8 @@ export declare const lookUpBarcode: functions.HttpsFunction & functions.Runnable
  * Analyze a food image using the Gemini API.
  */
 export declare const analyzeFoodImage: functions.HttpsFunction & functions.Runnable<any>;
+/**
+ * Generate a Good & Bad review using DeepSeek AI.
+ * Takes structured product data and returns a human-readable review.
+ */
+export declare const generateFoodReview: functions.HttpsFunction & functions.Runnable<any>;

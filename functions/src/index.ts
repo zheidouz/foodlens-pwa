@@ -1,6 +1,8 @@
 import * as functions from "firebase-functions/v1";
 import { lookUpBarcodeHandler, analyzeFoodImageHandler } from "./scan";
 import { calculateHealthScore } from "./scoring";
+import { generateReview } from "./review";
+import type { ReviewRequest } from "./review";
 
 /**
  * Look up a product by barcode using the Open Food Facts API.
@@ -58,5 +60,30 @@ export const analyzeFoodImage = functions
       success: true,
       product,
       score,
+    };
+  });
+
+/**
+ * Generate a Good & Bad review using DeepSeek AI.
+ * Takes structured product data and returns a human-readable review.
+ */
+export const generateFoodReview = functions
+  .region("us-central1")
+  .runWith({ memory: "512MB", maxInstances: 10, timeoutSeconds: 60, secrets: ["DEEPSEEK_API_KEY"] })
+  .https.onCall(async (data: ReviewRequest, context) => {
+    functions.logger.info("generateFoodReview called", { product: data.product_name });
+
+    if (!data.product_name) {
+      throw new functions.https.HttpsError(
+        "invalid-argument",
+        "Product data with a product_name is required."
+      );
+    }
+
+    const review = await generateReview(data);
+
+    return {
+      success: true,
+      review,
     };
   });

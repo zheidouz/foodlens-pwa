@@ -74,14 +74,15 @@ async function lookUpBarcodeHandler(barcode) {
     // Parse nova group
     let novaGroup = null;
     if (p.nova_group !== undefined && p.nova_group !== null) {
-        novaGroup = typeof p.nova_group === "string" ? parseInt(p.nova_group, 10) : p.nova_group;
+        const raw = typeof p.nova_group === "string" ? parseInt(p.nova_group, 10) : p.nova_group;
+        novaGroup = Number.isFinite(raw) && raw >= 1 && raw <= 4 ? raw : null;
     }
     return {
         product_name: p.product_name || "Unknown Product",
         brands: p.brands || "",
         nutriments: p.nutriments || {},
         ingredients: parseIngredientsList(p.ingredients_text || ""),
-        nova_group: novaGroup && novaGroup >= 1 && novaGroup <= 4 ? novaGroup : null,
+        nova_group: novaGroup,
         additives: (p.additives_tags || []).map(stripTagPrefix),
         allergens: (p.allergens_tags || []).map(stripTagPrefix),
         ecoscore: p.ecoscore_grade ? p.ecoscore_grade.toUpperCase() : null,
