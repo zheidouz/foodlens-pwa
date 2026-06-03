@@ -12,7 +12,7 @@
 | Task | Status | Notes |
 |------|--------|-------|
 | 1.1 Scaffold Next.js app | ✅ Done | `create-next-app` with TS + Tailwind v4, custom theme (emerald/sky), FoodLens placeholder page |
-| 1.2 Configure PWA | ⏳ Pending | |
+| 1.2 Configure PWA | ✅ Done | @serwist/next with webpack, manifest.json, offline.html, generated PNG icons, service worker with caching strategies |
 | 1.3 Firebase project setup | ⏳ Pending | |
 | 1.4 Initialize Firebase SDK | ⏳ Pending | |
 | 1.5 Deploy to Firebase Hosting | ⏳ Pending | |
