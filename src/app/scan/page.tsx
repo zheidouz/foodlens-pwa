@@ -1,16 +1,21 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { Camera, Barcode, ImageUp, ArrowLeft, FlaskConical } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Camera, Barcode, ImageUp, ArrowLeft, FlaskConical, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { CameraScanner } from "@/components/scanner/CameraScanner";
 import { BarcodeScanner } from "@/components/scanner/BarcodeScanner";
 import { PhotoUpload } from "@/components/scanner/PhotoUpload";
+import { lookUpBarcode, analyzeFoodImage } from "@/lib/functions";
 import type { ScanMode, ScanResult } from "@/types";
 
 export default function ScanPage() {
+  const router = useRouter();
   const [activeMode, setActiveMode] = useState<ScanMode>("camera");
   const [result, setResult] = useState<ScanResult | null>(null);
+  const [analyzing, setAnalyzing] = useState(false);
+  const [analysisError, setAnalysisError] = useState<string | null>(null);
 
   const handleCapture = useCallback(
     (dataUrl: string) => {
@@ -20,6 +25,7 @@ export default function ScanPage() {
         capturedAt: new Date(),
         mimeType: "image/jpeg",
       });
+      setAnalysisError(null);
     },
     []
   );
@@ -30,6 +36,7 @@ export default function ScanPage() {
       source: "barcode",
       capturedAt: new Date(),
     });
+    setAnalysisError(null);
   }, []);
 
   const handlePhotoSelect = useCallback((_file: File, dataUrl: string) => {
@@ -39,11 +46,46 @@ export default function ScanPage() {
       capturedAt: new Date(),
       mimeType: _file.type,
     });
+    setAnalysisError(null);
   }, []);
 
   const clearResult = useCallback(() => {
     setResult(null);
+    setAnalysisError(null);
   }, []);
+
+  const handleAnalyze = useCallback(async () => {
+    if (!result) return;
+
+    setAnalyzing(true);
+    setAnalysisError(null);
+
+    try {
+      let analysisResult;
+
+      if (result.source === "barcode") {
+        analysisResult = await lookUpBarcode(result.raw);
+      } else {
+        // Camera or upload — send base64 image
+        const mimeType = result.mimeType || "image/jpeg";
+        // Strip data:image/...;base64, prefix if present
+        const base64 = result.raw.includes("base64,")
+          ? result.raw.split("base64,")[1]
+          : result.raw;
+        analysisResult = await analyzeFoodImage(base64, mimeType);
+      }
+
+      // Cache result in sessionStorage for the results page
+      sessionStorage.setItem("foodlens_last_analysis", JSON.stringify(analysisResult));
+      router.push("/results");
+    } catch (err: unknown) {
+      const message =
+        err instanceof Error ? err.message : "Analysis failed. Please try again.";
+      setAnalysisError(message);
+    } finally {
+      setAnalyzing(false);
+    }
+  }, [result, router]);
 
   const modes: { key: ScanMode; label: string; icon: React.ReactNode }[] = [
     { key: "camera", label: "Camera", icon: <Camera className="h-4 w-4" /> },
@@ -115,13 +157,29 @@ export default function ScanPage() {
               </p>
             </div>
 
-            {/* Placeholder Analyze button */}
+            {/* Analyze button — calls Cloud Functions */}
+            {analysisError && (
+              <div className="rounded-xl bg-red-50 p-3 text-sm text-red-600 dark:bg-red-900/20 dark:text-red-400" role="alert">
+                {analysisError}
+              </div>
+            )}
+
             <button
-              disabled
-              className="flex w-full items-center justify-center gap-2 rounded-full bg-emerald-500 py-3.5 text-base font-semibold text-white shadow-lg transition-all hover:bg-emerald-600 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
+              onClick={handleAnalyze}
+              disabled={analyzing}
+              className="flex w-full items-center justify-center gap-2 rounded-full bg-emerald-500 py-3.5 text-base font-semibold text-white shadow-lg transition-all hover:bg-emerald-600 active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed"
             >
-              <FlaskConical className="h-5 w-5" />
-              Analyze Food
+              {analyzing ? (
+                <>
+                  <Loader2 className="h-5 w-5 animate-spin" />
+                  Analyzing...
+                </>
+              ) : (
+                <>
+                  <FlaskConical className="h-5 w-5" />
+                  Analyze Food
+                </>
+              )}
             </button>
 
             <button

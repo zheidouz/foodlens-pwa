@@ -420,11 +420,27 @@ function calculateHealthScore(product):
 
 **Branch**: `feature/sprint-3`
 
-### Sprint 4 — Results & Scoring UI (Upcoming)
+### Sprint 4 — Results & Scoring UI ✅ (June 3–9, 2026)
 
-**Goal**: Build the results page with Good & Bad card layout, score visualization.
+**Status**: Complete — all 6 tasks delivered
 
-See `docs/sprint-4/plan.md` when ready.
+| Task | Status | Key Deliverable |
+|------|--------|-----------------|
+| 4.1 Results page | ✅ | `/results` route with full layout |
+| 4.2 Wire Analyze button | ✅ | Live `lookUpBarcode` / `analyzeFoodImage` calls |
+| 4.3 Score visualization | ✅ | Gauge, Nutri-Score badge, NOVA badge |
+| 4.4 Good & Bad cards | ✅ | Factor lists with ±score badges |
+| 4.5 Allergen alerts | ✅ | Red/warning banners |
+| 4.6 Firestore persistence | ✅ | saveScan, getScanHistory, offline persistence |
+
+**Branch**: `feature/sprint-4`
+**Deploy URL**: https://foodlens-pwa-1780465145.web.app/results
+
+### Sprint 5 — User Features (Upcoming)
+
+**Goal**: Auth upgrade flow, profile page, scan history, shopping list.
+
+See `docs/sprint-5/plan.md` when ready.
 
 ---
 
