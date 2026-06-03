@@ -341,11 +341,25 @@ function calculateHealthScore(product):
 **Branch**: `feature/sprint-2`
 **Deploy URL**: https://foodlens-pwa-1780465145.web.app/scan
 
-### Sprint 3 — Backend (Upcoming)
+### Sprint 3 — Backend ✅ (June 3–9, 2026)
 
-**Goal**: Firebase Cloud Functions for barcode lookup and Gemini AI analysis.
+**Status**: Complete — all 5 tasks delivered
 
-See `docs/sprint-3/plan.md` when ready.
+| Task | Status | Key Deliverable |
+|------|--------|-----------------|
+| 3.1 Init Functions | ✅ | TypeScript project under functions/ |
+| 3.2 lookUpBarcode | ✅ | Open Food Facts API integration |
+| 3.3 analyzeFoodImage | ✅ | Gemini API image analysis |
+| 3.4 Scoring engine | ✅ | health_score 0-100, Nutri-Score, NOVA |
+| 3.5 Firestore rules | ✅ | Per-user data isolation |
+
+**Branch**: `feature/sprint-3`
+
+### Sprint 4 — Results & Scoring UI (Upcoming)
+
+**Goal**: Build the results page with Good & Bad card layout, score visualization.
+
+See `docs/sprint-4/plan.md` when ready.
 
 ---
 

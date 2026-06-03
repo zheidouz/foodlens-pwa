@@ -14,7 +14,7 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase only on the client side and only once
-const app =
+export const app =
   getApps().length === 0
     ? initializeApp(firebaseConfig)
     : getApps()[0];
