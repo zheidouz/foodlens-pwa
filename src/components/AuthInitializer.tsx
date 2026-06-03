@@ -9,7 +9,8 @@ import { initAuth } from "@/lib/firebase";
  */
 export function AuthInitializer() {
   useEffect(() => {
-    initAuth();
+    const unsubscribe = initAuth();
+    return () => unsubscribe();
   }, []);
 
   return null;

@@ -23,24 +23,30 @@ export const auth = getAuth(app);
 export const db = getFirestore(app);
 export const storage = getStorage(app);
 
-// Analytics only works in the browser
-export let analytics: Awaited<ReturnType<typeof getAnalytics>> | null = null;
-if (typeof window !== "undefined") {
-  isSupported().then((supported) => {
-    if (supported) {
-      analytics = getAnalytics(app);
-    }
-  });
+/**
+ * Lazily initialize analytics. Returns null on the server or if unsupported.
+ */
+let analyticsInstance: ReturnType<typeof getAnalytics> | null = null;
+
+export async function getAnalyticsInstance(): Promise<ReturnType<typeof getAnalytics> | null> {
+  if (typeof window === "undefined") return null;
+  if (analyticsInstance) return analyticsInstance;
+  const supported = await isSupported();
+  if (supported) {
+    analyticsInstance = getAnalytics(app);
+  }
+  return analyticsInstance;
 }
 
 /**
  * Initialize anonymous authentication silently on page load.
  * Call this once in a useEffect or in a root component layout.
+ * Returns an unsubscribe function to clean up the listener.
  */
-export function initAuth(): void {
-  if (typeof window === "undefined") return;
+export function initAuth(): () => void {
+  if (typeof window === "undefined") return () => {};
 
-  onAuthStateChanged(auth, (user) => {
+  const unsubscribe = onAuthStateChanged(auth, (user) => {
     if (!user) {
       signInAnonymously(auth).catch((error) => {
         // Silent fail — anonymous auth may not be enabled yet
@@ -48,4 +54,6 @@ export function initAuth(): void {
       });
     }
   });
+
+  return unsubscribe;
 }
