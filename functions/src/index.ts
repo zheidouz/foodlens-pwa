@@ -32,6 +32,10 @@ function handleCors(req: functions.https.Request, res: functions.Response): bool
 
 function parseBody(req: functions.https.Request): unknown {
   if (typeof req.body === "object" && req.body !== null) {
+    // Client wraps data in { data: ... } (callable-compatible format)
+    if ("data" in req.body && typeof req.body.data === "object" && req.body.data !== null) {
+      return req.body.data;
+    }
     return req.body;
   }
   return {};

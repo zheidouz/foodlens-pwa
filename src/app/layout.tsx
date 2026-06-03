@@ -20,6 +20,7 @@ export const metadata: Metadata = {
   icons: { apple: "/icons/icon-192.png" },
   other: {
     "theme-color": "#10b981",
+    "mobile-web-app-capable": "yes",
     "apple-mobile-web-app-capable": "yes",
     "apple-mobile-web-app-status-bar-style": "default",
   },
